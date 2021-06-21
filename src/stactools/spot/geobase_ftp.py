@@ -11,7 +11,7 @@ class GeobaseSpotFTP:
     def __init__(self):
         self.spot_location = "/pub/nrcan_rncan/image/spot/geobase_orthoimages"
         self.ftp_site = "ftp.geogratis.gc.ca"
-        self.ftp = FTP(self.ftp_site)
+        self.ftp = FTP(self.ftp_site, timeout=100)
         self.ftp.login()
 
     def list_contents(self, spot_id=""):
