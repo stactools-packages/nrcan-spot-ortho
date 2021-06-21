@@ -10,5 +10,5 @@ def register_plugin(registry):
     registry.register_subcommand(commands.create_spot_command)
 
 
-__version__ = '0.1.5'
+__version__ = '0.1.0'
 """Library version"""
