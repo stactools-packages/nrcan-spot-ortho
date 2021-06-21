@@ -1,15 +1,10 @@
 # stactools-spot
 
-Template repostitory for [stactools](https://github.com/stac-utils/stactools) packages.
+A subpackage of stactools for working with [SPOT](https://open.canada.ca/data/en/dataset/d799c202-603d-4e5c-b1eb-d058803f80f9) data.
 
-## How to use
+This subpackage converts the [Geobase Index shapefile](http://ftp.maps.canada.ca/pub/nrcan_rncan/image/spot/geobase_orthoimages/index/GeoBase_Orthoimage_Index.zip), that describes the SPOT image extents, to a STAC. 
 
-1. Clone this repository and name it `stactools-{NAME}`, where `NAME` is your package name.
-   This name should be short, memorable, and a valid Python package name (i.e. it shouldn't start with a number, etc).
-2. Update `setup.cfg` with your package name, description, and such.
-3. Rename `src/stactools.spot` to `src/stactools/{NAME}`.
-4. Rewrite this README to provide information about how to use your package.
-5. Update the LICENSE with your company's information (or whomever holds the copyright).
-6. Update the environment name in `environment.yml`.
-7. Update the environment variables in `.github/workflows/release.yml` to the appropriate values to publish for your organization.
-8. Update all scripts in the `docker` directory to refer to `stactools-{NAME}` and `stactools-{NAME}-dev`.
+Usage:
+```
+stac spot convert-index [index location] [root_href]
+```
