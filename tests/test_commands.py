@@ -4,8 +4,8 @@ from tempfile import TemporaryDirectory
 import pystac
 
 from stactools.spot.commands import create_spot_command
-from tests.utils import CliTestCase
-from tests.spot.test_utils import write_test_index
+from stactools.testing import CliTestCase
+from tests.test_utils import write_test_index
 
 
 class ConvertIndexTest(CliTestCase):
