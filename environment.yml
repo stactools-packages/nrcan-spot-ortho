@@ -3,9 +3,6 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - gdal
   - fiona
   - boto3
-  - pip
-  - pip:
-    - stactools==0.2.1a1
+  - stactools==0.2.1a1
