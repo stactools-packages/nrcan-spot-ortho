@@ -13,14 +13,19 @@ class GeobaseSpotFTP:
         self.spot_location = "/pub/nrcan_rncan/image/spot/geobase_orthoimages"
         self.ftp_site = "ftp.geogratis.gc.ca"
 
-        num_retries = 4
+        num_retries = 20
         for i in range(num_retries):
+            print(f"Connecting to Geobase FTP, attempt {i+1}/{num_retries}")
             try:
-                self.ftp = FTP(self.ftp_site, timeout=100)
+                self.ftp = FTP(self.ftp_site, timeout=30)
                 self.ftp.login()
+                err = False
                 break
             except Exception:
-                sleep(2)
+                err = True
+                sleep(10)
+        if err:
+            raise Exception("Couldn't connect to Geobase FTP")
 
     def list_contents(self, spot_id=""):
         """
