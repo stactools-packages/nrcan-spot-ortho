@@ -1,5 +1,6 @@
 import os
 from ftplib import FTP
+from time import sleep
 
 
 class GeobaseSpotFTP:
@@ -11,8 +12,15 @@ class GeobaseSpotFTP:
     def __init__(self):
         self.spot_location = "/pub/nrcan_rncan/image/spot/geobase_orthoimages"
         self.ftp_site = "ftp.geogratis.gc.ca"
-        self.ftp = FTP(self.ftp_site, timeout=100)
-        self.ftp.login()
+
+        num_retries = 4
+        for i in range(num_retries):
+            try:
+                self.ftp = FTP(self.ftp_site, timeout=100)
+                self.ftp.login()
+                break
+            except Exception:
+                sleep(2)
 
     def list_contents(self, spot_id=""):
         """
