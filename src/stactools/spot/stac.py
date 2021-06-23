@@ -38,7 +38,7 @@ def create_item(name, feature, collection):
     return item
 
 
-def build_items(index_geom, GeobaseSTAC):
+def build_items(index_geom, GeobaseSTAC, test=False):
     """
     index_geom: fiona readable file (ex, shapefile)
     Build the STAC items
@@ -57,7 +57,7 @@ def build_items(index_geom, GeobaseSTAC):
         ortho_collection.extent.spatial = SpatialExtent(
             [list(catalog_bbox.bounds)])
 
-        geobase = GeobaseSpotFTP()
+        geobase = GeobaseSpotFTP(test)
 
         count = 0
         for f in src:

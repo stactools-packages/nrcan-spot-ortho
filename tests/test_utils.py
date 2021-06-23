@@ -35,6 +35,15 @@ crs = {
     'no_defs': True
 }
 
+href_base = "ftp.geogratis.gc.ca/pub/nrcan_rncan/image/spot/" + \
+    "geobase_orthoimages/s5_09537_5435_20070531/s5_09537_5435_20070531_"
+href_endings = [
+    'm20_lcc00.zip', "m20_utm14.zip", "m20_utm15.zip", "p10_lcc00.zip",
+    "p10_utm14.zip", "p10_utm15.zip"
+]
+hrefs = [href_base + href_ending for href_ending in href_endings]
+href_thumb = href_base + "tn.jpg"
+
 
 def write_test_index(test_index_path):
 
