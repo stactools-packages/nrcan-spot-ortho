@@ -20,6 +20,7 @@ def create_spot_command(cli):
                   short_help='Convert SPOT index shapefile to STAC catalog')
     @click.argument('index')
     @click.argument('root_href')
+    @click.argument('test', default=False)
     @click.option('-c',
                   '--catalog-type',
                   type=click.Choice([
@@ -29,11 +30,11 @@ def create_spot_command(cli):
                   ],
                                     case_sensitive=False),
                   default=pystac.CatalogType.RELATIVE_PUBLISHED)
-    def convert_command(index, root_href, catalog_type):
+    def convert_command(index, root_href, test, catalog_type):
         """Converts the SPOT Index shapefile to a STAC Catalog.
         """
         GeobaseSTAC = build_catalog()
-        build_items(index, GeobaseSTAC)
+        build_items(index, GeobaseSTAC, test)
         GeobaseSTAC.normalize_and_save(root_href, catalog_type)
         print("Finished!")
 

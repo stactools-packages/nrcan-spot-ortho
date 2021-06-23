@@ -25,6 +25,7 @@ class ConvertIndexTest(CliTestCase):
                 'convert-index',
                 test_index_path,
                 '.',
+                'True',
             ]
             self.run_command(cmd)
             jsons = [
