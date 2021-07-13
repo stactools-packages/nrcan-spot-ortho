@@ -3,11 +3,13 @@ from tempfile import TemporaryDirectory
 import pystac
 from pystac.extensions.eo import EOExtension
 from pystac.extensions.projection import ProjectionExtension
-from stactools.spot.stac_templates import image_types
-from stactools.spot.geobase_ftp import GeobaseSpotFTP
-from stactools.spot.stac_templates import (spot_bands, spot_pan, proj_epsg)
-from stactools.spot.utils import (CustomStacIO, download_from_ftp, call, unzip,
-                                  upload_to_s3, file_exists)
+from stactools.nrcan_spot_ortho.stac_templates import image_types
+from stactools.nrcan_spot_ortho.geobase_ftp import GeobaseSpotFTP
+from stactools.nrcan_spot_ortho.stac_templates import (spot_bands, spot_pan,
+                                                       proj_epsg)
+from stactools.nrcan_spot_ortho.utils import (CustomStacIO, download_from_ftp,
+                                              call, unzip, upload_to_s3,
+                                              file_exists)
 from urllib.parse import urlparse
 import rasterio
 
@@ -190,8 +192,12 @@ def cogify_catalog(catalog_path, cog_directory=None, overwrite=False):
 
                 # COGify item's assets and save catalog
                 cogify_item(item, geobase, cog_directory, overwrite)
-                spot_catalog.normalize_and_save(os.path.dirname(catalog_path),
-                                                spot_catalog.catalog_type)
+                # spot_catalog.normalize_and_save(os.path.dirname(catalog_path),
+                #                                 spot_catalog.catalog_type)
+                item.save_object()
 
             else:
                 print(f"Skipping {item.id}, already COGified.")
+
+    spot_catalog.normalize_and_save(os.path.dirname(catalog_path),
+                                    spot_catalog.catalog_type)

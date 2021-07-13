@@ -18,15 +18,17 @@ image_types = {
 proj_epsg = {f"utm{str(i).zfill(2)}": 26900 + i for i in range(1, 25)}
 proj_epsg["lcc00"] = 3979
 
-spot_catalog = Catalog(id="geobase_spot",
-                       description="STAC Catalog for Geobase SPOT",
-                       title="STAC Catalog for Geobase SPOT",
-                       stac_extensions=None)
+spot_catalog = Catalog(
+    id="nrcan_spot_ortho",
+    description="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
+    title="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
+    stac_extensions=None)
 
-spot45_catalog = Catalog(id="canada_spot_orthoimages",
-                         description="SPOT 4 and 5 orthoimages of Canada",
-                         title="SPOT 4 and 5 orthoimages of Canada",
-                         stac_extensions=None)
+spot45_catalog = Catalog(
+    id="nrcan_spot45_ortho",
+    description="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
+    title="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
+    stac_extensions=None)
 
 geobase_providers = [
     Provider(

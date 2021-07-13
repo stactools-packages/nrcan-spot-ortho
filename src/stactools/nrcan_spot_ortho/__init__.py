@@ -5,7 +5,7 @@ stactools.core.use_fsspec()
 
 def register_plugin(registry):
     """Register subcommands"""
-    from stactools.spot import commands
+    from stactools.nrcan_spot_ortho import commands
 
     registry.register_subcommand(commands.create_spot_command)
 
