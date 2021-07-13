@@ -11,19 +11,18 @@ logger = logging.getLogger(__name__)
 
 
 def create_spot_command(cli):
-    """Creates a command group for commands dealing with orthorectified SPOT 4 and 5 data
+    """Creates a command group for commands dealing with orthorectified SPOT
+    4 and 5 data
     """
-    @cli.group(
-        'spot',
-        short_help="Commands for working with orthorectified SPOT 4 and 5 data over Canada."
-    )
+    @cli.group('spot',
+               short_help='Commands for ortho SPOT 4 and 5 data over Canada.')
     def spot():
         pass
 
     @spot.command(
         'convert-index',
-        short_help="""Convert the orthorectified SPOT 4 and 5 index shapefile covering
-        Canada to a STAC catalog.""")
+        short_help='Convert ortho SPOT 4 and 5 index shapefile to STAC catalog.'
+    )
     @click.argument('index')
     @click.argument('root_href')
     @click.option('-t',
