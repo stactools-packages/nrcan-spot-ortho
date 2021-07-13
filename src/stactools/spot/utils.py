@@ -1,45 +1,103 @@
-import json
-import urllib.request
+import os
 from urllib.parse import urlparse
-
+from pystac import Link
+from pystac.stac_io import DefaultStacIO
+from typing import Union, Any
+import zipfile
+import logging
+from subprocess import Popen, PIPE, STDOUT
 import boto3
+from botocore.errorfactory import ClientError
 
-from pystac import StacIO
+logger = logging.getLogger(__name__)
 
 
-def read_remote_stacs(uri):
-    """
-    Reads STACs from a remote location. To be used to set StacIO
-    Defaults to local storage.
-    """
-    parsed = urlparse(uri)
+class CustomStacIO(DefaultStacIO):
+    def __init__(self):
+        self.s3 = boto3.resource("s3")
+
+    def read_text(self, source: Union[str, Link], *args: Any,
+                  **kwargs: Any) -> str:
+        parsed = urlparse(source)
+        if parsed.scheme == "s3":
+            bucket = parsed.netloc
+            key = parsed.path[1:]
+
+            obj = self.s3.Object(bucket, key)
+            return obj.get()["Body"].read().decode("utf-8")
+        else:
+            return super().read_text(source, *args, **kwargs)
+
+    def write_text(self, dest: Union[str, Link], txt: str, *args: Any,
+                   **kwargs: Any) -> None:
+        parsed = urlparse(dest)
+        if parsed.scheme == "s3":
+            bucket = parsed.netloc
+            key = parsed.path[1:]
+            s3 = boto3.resource("s3")
+            s3.Object(bucket, key).put(Body=txt, ContentEncoding="utf-8")
+        else:
+            super().write_text(dest, txt, *args, **kwargs)
+
+
+def call(command):
+    def log_subprocess_output(pipe):
+        for line in iter(pipe.readline, b''):  # b'\n'-separated lines
+            logger.info(line.decode("utf-8").strip('\n'))
+
+    process = Popen(command, stdout=PIPE, stderr=STDOUT)
+    with process.stdout:
+        log_subprocess_output(process.stdout)
+    return process.wait()  # 0 means success
+
+
+def upload_to_s3(parsed, local_path):
+    bucket = parsed.netloc
+    key = parsed.path[1:]
+    s3 = boto3.resource("s3")
+    print(f"Uploading {os.path.basename(local_path)}")
+    s3.Bucket(bucket).upload_file(local_path, key)
+
+
+def file_exists(path):
+    parsed = urlparse(path)
+
     if parsed.scheme == "s3":
         bucket = parsed.netloc
         key = parsed.path[1:]
-        s3 = boto3.resource("s3")
-        obj = s3.Object(bucket, key)
-        return json.loads(obj.get()["Body"].read().decode("utf-8"))
-    if parsed.scheme in ["http", "https"]:
-        with urllib.request.urlopen(uri) as url:
-            stac = json.loads(url.read().decode())
-            return stac
+        s3 = boto3.client('s3')
+        try:
+            s3.head_object(Bucket=bucket, Key=key)
+            return True
+        except ClientError:
+            # Not found
+            return False
+
     else:
-        return StacIO.default(uri)
+        return os.path.exists(path)
 
 
-def write_remote_stacs(uri, txt):
-    """
-    Writes STACs from a remote location. To be used to set STAC_IO
-    Defaults to local storage.
-    """
-    parsed = urlparse(uri)
-    if parsed.scheme == "s3":
-        bucket = parsed.netloc
-        key = parsed.path[1:]
-        s3 = boto3.resource("s3")
-        s3.Object(bucket, key).put(Body=txt)
-    else:
-        StacIO.default(uri, txt)
+def download_from_ftp(href, out_path, ftp):
+    path = href.split(ftp.ftp_site)[-1]
+    print(f"Downloading {os.path.basename(path)}")
+    with open(out_path, 'wb') as f:
+        ftp.ftp.retrbinary(f"RETR {path}", f.write)
+
+
+def unzip(zip_path, out_folder):
+    zfile = zipfile.ZipFile(zip_path, 'r')
+    out_paths = []
+
+    for zip_file in [f for f in zfile.namelist() if '.tif' in f]:
+        (folder, filename) = os.path.split(zip_file)
+        out_path = os.path.join(out_folder, filename)
+        out_paths.append(out_path)
+
+        print(f"Decompressing {folder}{filename}")
+        with open(out_path, 'wb') as f:
+            f.write(zfile.read(zip_file))
+
+    return out_paths
 
 
 def bbox(f):

@@ -34,7 +34,7 @@ class GeobaseSpotFTP:
     def list_contents(self, spot_id=""):
         """
         Get a listing of the children in a given path
-        retruns a list of absolute file paths
+        returns a list of absolute file paths
         """
         if self.test:
             return hrefs
