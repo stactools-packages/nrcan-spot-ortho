@@ -12,9 +12,9 @@ The root href can be a local or S3 path. The default catalog type is `pystac.Cat
 
 The STAC catalog created contains assets with hrefs pointing to zipped imagery on the Geobase FTP. These can be be downloaded, unzipped and converted to COGs with:
 ```
-stac spot cogify-assets [catalog path] -d [COG directory] -o [overwrite]
+stac spot cogify-assets [catalog path] -d [COG directory]
 ```
 
-By default the COGs will be written into the same directory's as their respective STAC items, and will __not__ overwrite existing COGs. The STAC will be updated with the COG assets during this process.
+By default the COGs will be written into the same directory's as their respective STAC items, and will __not__ overwrite existing COGs (use `--overwrite` to do so). The STAC will be updated with the COG assets during this process.
 
 A complete SPOT STAC, including COGs, can be found [here](). An API for this STAC can be found [here]().
