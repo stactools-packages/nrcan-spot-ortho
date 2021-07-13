@@ -61,7 +61,7 @@ def create_spot_command(cli):
          each relevant STAC item's folder.""")
     @click.option('-o',
                   '--overwrite',
-                  type=click.Choice([True, False]),
+                  is_flag=True,
                   default=False,
                   help="Overwrite existing COGs.")
     def cogify_command(catalog_path, cog_directory, overwrite):
