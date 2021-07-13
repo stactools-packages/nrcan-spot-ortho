@@ -25,7 +25,7 @@ class ConvertIndexTest(CliTestCase):
                 'convert-index',
                 test_index_path,
                 '.',
-                'True',
+                '-t',
             ]
             self.run_command(cmd)
             jsons = [
@@ -34,7 +34,7 @@ class ConvertIndexTest(CliTestCase):
             ]
             os.chdir(cwd)
 
-            self.assertEqual(len(jsons), 3)
+            self.assertEqual(len(jsons), 6)
 
             for json in jsons:
                 item_path = os.path.join(tmp_dir, json)
