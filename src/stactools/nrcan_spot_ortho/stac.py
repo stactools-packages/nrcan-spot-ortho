@@ -12,9 +12,10 @@ from pystac import (
 from pystac.extensions.projection import ProjectionExtension
 from shapely.geometry import box
 from shapely.ops import transform as shapely_transform
-from stactools.spot.geobase_ftp import GeobaseSpotFTP
-from stactools.spot.utils import (bbox, transform_geom, CustomStacIO)
-from stactools.spot.stac_templates import (spot_sensor, proj_epsg)
+from stactools.nrcan_spot_ortho.geobase_ftp import GeobaseSpotFTP
+from stactools.nrcan_spot_ortho.utils import (bbox, transform_geom,
+                                              CustomStacIO)
+from stactools.nrcan_spot_ortho.stac_templates import (spot_sensor, proj_epsg)
 
 StacIO.set_default(CustomStacIO)
 null = None
@@ -65,7 +66,7 @@ def create_item(name, sensor, feature, collection):
 
 
 def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
-    """Build the STAC items for SPOT.
+    """Build the STAC items for orthorectified SPOT 4 and 5 over Canada.
 
     Args:
         index_geom (str): File path of fiona-readable file (e.g. a shapefile)
@@ -93,8 +94,7 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
         # Set spatial extent for collections
         for sensor in ["spot4", "spot5"]:
             ortho_collection = spot_catalog.get_child(
-                "canada_spot_orthoimages").get_child(
-                    f"canada_{sensor}_orthoimages")
+                "nrcan_spot45_ortho").get_child(f"canada_{sensor}_orthoimages")
             ortho_collection.extent.spatial = SpatialExtent(
                 [list(collection_bbox.bounds)])
 
@@ -116,7 +116,7 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
             sensor_full = spot_sensor[sensor].lower().replace(" ", "")
             year = name.split("_")[3][:4]
             ortho_collection = spot_catalog.get_child(
-                "canada_spot_orthoimages").get_child(
+                "nrcan_spot45_ortho").get_child(
                     f"canada_{sensor_full}_orthoimages")
 
             # Get/create the catalog for the item's year

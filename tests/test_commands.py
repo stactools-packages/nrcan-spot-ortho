@@ -3,7 +3,7 @@ from tempfile import TemporaryDirectory
 
 import pystac
 
-from stactools.spot.commands import create_spot_command
+from stactools.nrcan_spot_ortho.commands import create_spot_command
 from stactools.testing import CliTestCase
 from tests.test_utils import write_test_index
 

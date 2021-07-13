@@ -3,23 +3,27 @@ import logging
 import click
 import pystac
 
-from stactools.spot.stac import build_items
-from stactools.spot.stac_templates import build_root_catalog
-from stactools.spot.cog import cogify_catalog
+from stactools.nrcan_spot_ortho.stac import build_items
+from stactools.nrcan_spot_ortho.stac_templates import build_root_catalog
+from stactools.nrcan_spot_ortho.cog import cogify_catalog
 
 logger = logging.getLogger(__name__)
 
 
 def create_spot_command(cli):
-    """Creates a command group for commands dealing with spot data
+    """Creates a command group for commands dealing with orthorectified SPOT 4 and 5 data
     """
-    @cli.group('spot', short_help="Commands for working with spot data.")
+    @cli.group(
+        'spot',
+        short_help="Commands for working with orthorectified SPOT 4 and 5 data over Canada."
+    )
     def spot():
         pass
 
     @spot.command(
         'convert-index',
-        short_help='Convert the SPOT index shapefile to a STAC catalog.')
+        short_help="""Convert the orthorectified SPOT 4 and 5 index shapefile covering
+        Canada to a STAC catalog.""")
     @click.argument('index')
     @click.argument('root_href')
     @click.option('-t',
