@@ -25,7 +25,7 @@ spot_catalog = Catalog(
     stac_extensions=None)
 
 spot45_catalog = Catalog(
-    id="nrcan_spot45_ortho",
+    id="canada_spot_orthoimages",
     description="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
     title="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
     stac_extensions=None)
