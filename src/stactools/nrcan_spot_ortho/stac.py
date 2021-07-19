@@ -94,7 +94,7 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
         # Set spatial extent for collections
         for sensor in ["spot4", "spot5"]:
             ortho_collection = spot_catalog.get_child(
-                "nrcan_spot45_ortho").get_child(f"canada_{sensor}_orthoimages")
+                "canada_spot_orthoimages").get_child(f"canada_{sensor}_orthoimages")
             ortho_collection.extent.spatial = SpatialExtent(
                 [list(collection_bbox.bounds)])
 
@@ -116,7 +116,7 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
             sensor_full = spot_sensor[sensor].lower().replace(" ", "")
             year = name.split("_")[3][:4]
             ortho_collection = spot_catalog.get_child(
-                "nrcan_spot45_ortho").get_child(
+                "canada_spot_orthoimages").get_child(
                     f"canada_{sensor_full}_orthoimages")
 
             # Get/create the catalog for the item's year

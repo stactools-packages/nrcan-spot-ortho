@@ -166,7 +166,7 @@ def cogify_item(item, geobase, cog_directory, overwrite, cog_proj="lcc00"):
 
 def cogify_catalog(catalog_path, cog_directory=None, overwrite=False):
     """Crawl a catalog, find zipped imagery hrefs within items, download/unzip/COGify
-    these, the include the results as new assets.
+    these, include the results as new assets.
 
     Args:
         catalog_path (str): The file path of the root STAC catalog.
@@ -179,18 +179,23 @@ def cogify_catalog(catalog_path, cog_directory=None, overwrite=False):
     # Open catalog
     spot_catalog = pystac.read_file(catalog_path)
 
-    geobase = GeobaseSpotFTP()
-
+    count = 0
     for _, _, items in spot_catalog.walk():
+        
         for item in items:
             print(f"\n{item.id}...")
+
+            # Reconnect to the Geobase FTP occasionally to avoid timeouts
+            if count % 5 == 0:
+                geobase = GeobaseSpotFTP()
+            count += 1
 
             # Skip if COGified already and overwrite==False
             cogified = ("B1" in item.assets.keys()) and file_exists(
                 item.assets["B1"].href)
             if (not cogified) or (cogified and overwrite):
 
-                # COGify item's assets and save catalog
+                # COGify item's assets and save item
                 cogify_item(item, geobase, cog_directory, overwrite)
                 # spot_catalog.normalize_and_save(os.path.dirname(catalog_path),
                 #                                 spot_catalog.catalog_type)
@@ -198,6 +203,3 @@ def cogify_catalog(catalog_path, cog_directory=None, overwrite=False):
 
             else:
                 print(f"Skipping {item.id}, already COGified.")
-
-    spot_catalog.normalize_and_save(os.path.dirname(catalog_path),
-                                    spot_catalog.catalog_type)
