@@ -1,3 +1,4 @@
+from ftplib import error_perm
 import os
 from urllib.parse import urlparse
 from pystac import Link
@@ -8,6 +9,7 @@ import logging
 from subprocess import Popen, PIPE, STDOUT
 import boto3
 from botocore.errorfactory import ClientError
+import glob
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +61,27 @@ def upload_to_s3(parsed, local_path):
     s3.Bucket(bucket).upload_file(local_path, key)
 
 
-def file_exists(path):
+def get_existing_paths(directory, ending):
+    parsed = urlparse(directory)
+
+    if parsed.scheme == "s3":
+        bucket = parsed.netloc
+        s3 = boto3.client('s3')
+        paginator = s3.get_paginator('list_objects_v2')
+        pages = paginator.paginate(Bucket=bucket) #, Prefix='prefix'
+        paths = []
+        for i, page in enumerate(pages):
+            print(f"S3 page {i+1}/?")
+            paths += [f"{directory}/{d['Key']}" for d in page['Contents'] 
+            if d['Key'][-len(ending):] == ending]
+        return paths
+
+    else:
+        return glob.glob(f"{directory}{os.sep}**{os.sep}*{ending}",
+                         recursive=True)
+
+
+def file_exists(path, paths_s3):
     parsed = urlparse(path)
 
     if parsed.scheme == "s3":
@@ -81,7 +103,12 @@ def download_from_ftp(href, out_path, ftp):
     path = href.split(ftp.ftp_site)[-1]
     print(f"Downloading {os.path.basename(path)}")
     with open(out_path, 'wb') as f:
-        ftp.ftp.retrbinary(f"RETR {path}", f.write)
+        try:
+            ftp.ftp.retrbinary(f"RETR {path}", f.write)
+            return True
+        except error_perm:
+            print(f"Failed to open {path} on FTP")
+            return False
 
 
 def unzip(zip_path, out_folder):
