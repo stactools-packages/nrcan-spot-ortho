@@ -94,7 +94,8 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
         # Set spatial extent for collections
         for sensor in ["spot4", "spot5"]:
             ortho_collection = spot_catalog.get_child(
-                "canada_spot_orthoimages").get_child(f"canada_{sensor}_orthoimages")
+                "canada_spot_orthoimages").get_child(
+                    f"canada_{sensor}_orthoimages")
             ortho_collection.extent.spatial = SpatialExtent(
                 [list(collection_bbox.bounds)])
 
