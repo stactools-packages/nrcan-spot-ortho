@@ -1,4 +1,4 @@
-# stactools-nrcan_spot_ortho
+# stactools-nrcan-spot-ortho
 
 A subpackage of stactools for working with [orthorectified SPOT 4 and 5 data over Canada](https://open.canada.ca/data/en/dataset/d799c202-603d-4e5c-b1eb-d058803f80f9).
 
