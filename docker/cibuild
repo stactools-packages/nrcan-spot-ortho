@@ -16,6 +16,6 @@ Runs CI in the docker dev container.
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
     ./docker/build
     docker run --rm \
-        --entrypoint /src/stactools-nrcan_spot_ortho/scripts/cibuild \
-        stactools-nrcan_spot_ortho-dev:latest
+        --entrypoint /src/stactools-nrcan-spot-ortho/scripts/cibuild \
+        stactools-nrcan-spot-ortho-dev:latest
 fi

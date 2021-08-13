@@ -1,0 +1,35 @@
+{
+  "type": "Catalog",
+  "id": "canada-spot-orthoimages",
+  "stac_version": "1.0.0",
+  "description": "STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
+  "links": [
+    {
+      "rel": "root",
+      "href": "/media/jvrt/extradrive1/gdrive_spark/202106_spot/catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "/media/jvrt/extradrive1/gdrive_spark/202106_spot/canada-spot-orthoimages/canada-spot4-orthoimages/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "/media/jvrt/extradrive1/gdrive_spark/202106_spot/canada-spot-orthoimages/canada-spot5-orthoimages/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "/media/jvrt/extradrive1/gdrive_spark/202106_spot/catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "/media/jvrt/extradrive1/gdrive_spark/202106_spot/canada-spot-orthoimages/catalog.json",
+      "type": "application/json"
+    }
+  ],
+  "stac_extensions": [],
+  "title": "STAC Catalog for orthorectified SPOT 4 and 5 data of Canada"
+}

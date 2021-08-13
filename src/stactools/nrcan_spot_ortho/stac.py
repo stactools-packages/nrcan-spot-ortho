@@ -35,12 +35,11 @@ def create_year_catalog(sensor, year, ortho_collection):
     return spot_catalog
 
 
-def create_item(name, sensor, feature, collection):
+def create_item(name, feature, collection):
     """Create a STAC item for SPOT
 
     Args:
         name (str): SPOT ID.
-        sensor (str): "S4" or "S5".
         feature (dict): geojson feature.
         collection (pystac.Collection): pySTAC collection object.
 
@@ -94,8 +93,8 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
         # Set spatial extent for collections
         for sensor in ["spot4", "spot5"]:
             ortho_collection = spot_catalog.get_child(
-                "canada_spot_orthoimages").get_child(
-                    f"canada_{sensor}_orthoimages")
+                "canada-spot-orthoimages").get_child(
+                    f"canada-{sensor}-orthoimages")
             ortho_collection.extent.spatial = SpatialExtent(
                 [list(collection_bbox.bounds)])
 
@@ -117,8 +116,8 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
             sensor_full = spot_sensor[sensor].lower().replace(" ", "")
             year = name.split("_")[3][:4]
             ortho_collection = spot_catalog.get_child(
-                "canada_spot_orthoimages").get_child(
-                    f"canada_{sensor_full}_orthoimages")
+                "canada-spot-orthoimages").get_child(
+                    f"canada-{sensor_full}-orthoimages")
 
             # Get/create the catalog for the item's year
             if not ortho_collection.get_child(f"{sensor}_{year}"):
@@ -128,7 +127,7 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
                 year_catalog = ortho_collection.get_child(f"{sensor}_{year}")
 
             # Create item and add to catalog
-            new_item = create_item(name, sensor, feature_out, ortho_collection)
+            new_item = create_item(name, feature_out, ortho_collection)
             year_catalog.add_item(new_item)
 
             for i, fname in enumerate(geobase.list_contents(name)):
@@ -143,8 +142,7 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
                 spot_file = Asset(href=fname.replace("ftp.", "http://ftp."),
                                   title=title,
                                   media_type="application/zip",
-                                  roles=['data'],
-                                  properties={"gsd": gsd})
+                                  roles=['data'])
 
                 # Include projection information
                 proj_ext = ProjectionExtension.ext(spot_file)

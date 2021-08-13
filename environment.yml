@@ -1,4 +1,4 @@
-name: stactools-nrcan_spot_ortho
+name: stactools-nrcan-spot-ortho
 channels:
   - conda-forge
   - defaults
