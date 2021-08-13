@@ -19,13 +19,13 @@ proj_epsg = {f"utm{str(i).zfill(2)}": 26900 + i for i in range(1, 25)}
 proj_epsg["lcc00"] = 3979
 
 spot_catalog = Catalog(
-    id="nrcan_spot_ortho",
+    id="nrcan-spot-ortho",
     description="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
     title="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
     stac_extensions=None)
 
 spot45_catalog = Catalog(
-    id="canada_spot_orthoimages",
+    id="canada-spot-orthoimages",
     description="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
     title="STAC Catalog for orthorectified SPOT 4 and 5 data of Canada",
     stac_extensions=None)
@@ -110,7 +110,7 @@ spot_pan = {
 }
 
 spot4_collection = Collection(
-    id="canada_spot4_orthoimages",
+    id="canada-spot4-orthoimages",
     description="SPOT 4 orthoimages of Canada",
     extent=spot_extents,
     title="SPOT 4 orthoimages of Canada",
@@ -134,7 +134,7 @@ proj_ext = SummariesProjectionExtension(spot4_collection)
 proj_ext.epsg = list(proj_epsg.values())
 
 spot5_collection = Collection(
-    id="canada_spot5_orthoimages",
+    id="canada-spot5-orthoimages",
     description="SPOT 5 orthoimages of Canada",
     extent=spot_extents,
     title="SPOT 5 orthoimages of Canada",

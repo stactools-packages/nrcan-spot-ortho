@@ -9,7 +9,7 @@ from stactools.nrcan_spot_ortho.stac_templates import (spot_bands, spot_pan,
                                                        proj_epsg)
 from stactools.nrcan_spot_ortho.utils import (CustomStacIO, download_from_ftp,
                                               call, get_existing_paths, unzip,
-                                              upload_to_s3, file_exists)
+                                              upload_to_s3)
 from urllib.parse import urlparse
 import rasterio
 
