@@ -81,22 +81,22 @@ def get_existing_paths(directory, ending):
                          recursive=True)
 
 
-def file_exists(path, paths_s3):
-    parsed = urlparse(path)
+# def file_exists(path, paths_s3):
+#     parsed = urlparse(path)
 
-    if parsed.scheme == "s3":
-        bucket = parsed.netloc
-        key = parsed.path[1:]
-        s3 = boto3.client('s3')
-        try:
-            s3.head_object(Bucket=bucket, Key=key)
-            return True
-        except ClientError:
-            # Not found
-            return False
+#     if parsed.scheme == "s3":
+#         bucket = parsed.netloc
+#         key = parsed.path[1:]
+#         s3 = boto3.client('s3')
+#         try:
+#             s3.head_object(Bucket=bucket, Key=key)
+#             return True
+#         except ClientError:
+#             # Not found
+#             return False
 
-    else:
-        return os.path.exists(path)
+#     else:
+#         return os.path.exists(path)
 
 
 def download_from_ftp(href, out_path, ftp):
