@@ -14,7 +14,7 @@ def create_spot_command(cli):
     """Creates a command group for commands dealing with orthorectified SPOT
     4 and 5 data
     """
-    @cli.group('spot',
+    @cli.group('nrcan-spot-ortho',
                short_help='Commands for ortho SPOT 4 and 5 data over Canada.')
     def spot():
         pass
@@ -58,7 +58,7 @@ def create_spot_command(cli):
     @click.argument('catalog_path')
     @click.option(
         '-d',
-        '--cog-dir',
+        '--cog-directory',
         default=None,
         help="""The directory to store all COGs. Leave empty to store COGs within
          each relevant STAC item's folder.""")
