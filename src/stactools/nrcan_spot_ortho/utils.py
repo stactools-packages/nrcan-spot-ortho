@@ -8,7 +8,7 @@ import zipfile
 import logging
 from subprocess import Popen, PIPE, STDOUT
 import boto3
-from botocore.errorfactory import ClientError
+# from botocore.errorfactory import ClientError
 import glob
 
 logger = logging.getLogger(__name__)
@@ -68,12 +68,14 @@ def get_existing_paths(directory, ending):
         bucket = parsed.netloc
         s3 = boto3.client('s3')
         paginator = s3.get_paginator('list_objects_v2')
-        pages = paginator.paginate(Bucket=bucket) #, Prefix='prefix'
+        pages = paginator.paginate(Bucket=bucket)
         paths = []
         for i, page in enumerate(pages):
             print(f"S3 page {i+1}/?")
-            paths += [f"{directory}/{d['Key']}" for d in page['Contents'] 
-            if d['Key'][-len(ending):] == ending]
+            paths += [
+                f"{directory}/{d['Key']}" for d in page['Contents']
+                if d['Key'][-len(ending):] == ending
+            ]
         return paths
 
     else:

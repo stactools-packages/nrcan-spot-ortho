@@ -134,7 +134,7 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
                 # Include asset information for Geobase zipped imagery
                 # STAC parses hrefs starting with "ftp." as relative
                 title = fname[-13:-4]
-                gsd = float(title.split("_")[0][1:])
+                # gsd = float(title.split("_")[0][1:])
                 contents = {
                     "m": "Multi-band",
                     "p": "Panchromatic"
