@@ -1,4 +1,4 @@
-FROM stactools-spot:latest
+FROM stactools-nrcan-spot-ortho:latest
 
 RUN conda install -c conda-forge pandoc
 
