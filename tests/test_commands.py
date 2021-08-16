@@ -21,7 +21,7 @@ class ConvertIndexTest(CliTestCase):
             cwd = os.getcwd()
             os.chdir(tmp_dir)
             cmd = [
-                'nrca-spot-ortho',
+                'nrcan-spot-ortho',
                 'convert-index',
                 test_index_path,
                 '.',
