@@ -47,8 +47,8 @@ def cogify(input_path, output_path, overwrite, existing_cog_paths):
 
 
 def include_cog_asset(item, cog_path, cog_proj):
-    """Mutate a STAC item to include a COG at cog_path with the 
-    projection cog_proj as an asset.
+    """Mutate a STAC item to include a COG at cog_path with the
+     projection cog_proj as an asset.
     """
     # Include the COG as an asset
     cog_filename = os.path.basename(cog_path)
@@ -76,8 +76,12 @@ def include_cog_asset(item, cog_path, cog_proj):
     item.assets[title] = asset
 
 
-def cogify_item(item, cog_directory, overwrite, 
-                existing_cog_paths, existing_tn_paths, cog_proj="lcc00"):
+def cogify_item(item,
+                cog_directory,
+                overwrite,
+                existing_cog_paths,
+                existing_tn_paths,
+                cog_proj="lcc00"):
     """Create COGs from the GeoTIFF asset contained in the passed in STAC item.
     Mutates the item to include assets for the new COGs.
 
@@ -161,12 +165,14 @@ def cogify_item(item, cog_directory, overwrite,
             if tn_path not in existing_tn_paths:
                 if (parsed.scheme == "s3"):
                     tmp_tn_path = os.path.join(tmp_dir, tn_fname)
-                    success = download_from_ftp(tn_href, tmp_tn_path, GeobaseSpotFTP())
+                    success = download_from_ftp(tn_href, tmp_tn_path,
+                                                GeobaseSpotFTP())
                     if success:
                         upload_to_s3(parsed, tmp_tn_path)
 
                 else:
-                    success = download_from_ftp(tn_href, tn_path, GeobaseSpotFTP())
+                    success = download_from_ftp(tn_href, tn_path,
+                                                GeobaseSpotFTP())
 
             if success:
                 item.assets["thumbnail"].href = tn_path
@@ -188,7 +194,8 @@ def cogify_catalog(catalog_path, cog_directory=None, overwrite=False):
     spot_catalog = pystac.read_file(catalog_path)
 
     # Read cog_directory contents to speed up checks for existing files
-    check_dir = cog_directory if cog_directory else os.path.dirname(catalog_path)
+    check_dir = cog_directory if cog_directory else os.path.dirname(
+        catalog_path)
     print(f"Getting contents of {check_dir}...")
     existing_cog_paths = get_existing_paths(check_dir, ending="_cog.tif")
     existing_tn_paths = get_existing_paths(check_dir, ending="_tn.jpg")
@@ -208,8 +215,8 @@ def cogify_catalog(catalog_path, cog_directory=None, overwrite=False):
             if (not cogified) or (cogified and overwrite):
 
                 # COGify item's assets and save item
-                cogify_item(item, cog_directory, overwrite,
-                            existing_cog_paths, existing_tn_paths)
+                cogify_item(item, cog_directory, overwrite, existing_cog_paths,
+                            existing_tn_paths)
                 # spot_catalog.normalize_and_save(os.path.dirname(catalog_path),
                 #                                 spot_catalog.catalog_type)
                 item.save_object()
