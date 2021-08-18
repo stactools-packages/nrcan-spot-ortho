@@ -25,11 +25,6 @@ def create_spot_command(cli):
     )
     @click.argument('index')
     @click.argument('root_href')
-    @click.option('-t',
-                  '--test',
-                  is_flag=True,
-                  default=False,
-                  help='Run as a test. Doesn\'t require Geobase FTP access.')
     @click.option('-c',
                   '--catalog-type',
                   type=click.Choice([
@@ -39,7 +34,7 @@ def create_spot_command(cli):
                   ],
                                     case_sensitive=False),
                   default=pystac.CatalogType.ABSOLUTE_PUBLISHED)
-    def convert_command(index, root_href, test, catalog_type):
+    def convert_command(index, root_href, catalog_type):
         """Converts the SPOT Index shapefile to a STAC Catalog.
         """
         # Create a catalog root and collections for each sensor
@@ -47,6 +42,7 @@ def create_spot_command(cli):
         spot_catalog.normalize_hrefs(root_href)
 
         # Populate the catalog with items
+        test = 'spot_index_test.shp' in index
         build_items(index, spot_catalog, test, root_href, catalog_type)
         spot_catalog.normalize_and_save(root_href, catalog_type)
 

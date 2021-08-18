@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import fiona
+import json
 
 # Test cases, file names to keys and values that should exist.
 schema = {
@@ -41,8 +42,10 @@ href_endings = [
     'm20_lcc00.zip', "m20_utm14.zip", "m20_utm15.zip", "p10_lcc00.zip",
     "p10_utm14.zip", "p10_utm15.zip"
 ]
-hrefs = [href_base + href_ending for href_ending in href_endings]
-href_thumb = href_base + "tn.jpg"
+hrefs = {
+    "hrefs": [href_base + href_ending for href_ending in href_endings],
+    "tn": href_base + "tn.jpg"
+}
 
 
 def write_test_index(test_index_path):
@@ -53,3 +56,8 @@ def write_test_index(test_index_path):
                     schema=schema,
                     crs=crs) as output:
         output.write(src0)
+
+
+def write_test_hrefs(test_hrefs_path):
+    with open(test_hrefs_path, 'w') as f:
+        json.dump(hrefs, f)

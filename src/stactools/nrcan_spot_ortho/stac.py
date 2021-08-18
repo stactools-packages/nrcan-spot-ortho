@@ -1,5 +1,7 @@
 from datetime import datetime
+import os
 import fiona
+import json
 from pyproj import crs, Transformer
 from pystac import (
     Catalog,
@@ -99,7 +101,13 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
                 [list(collection_bbox.bounds)])
 
         # Open a Geobase FTP connection
-        geobase = GeobaseSpotFTP(test)
+        if test:
+            hrefs_path = os.path.join(os.path.dirname(index_geom),
+                                      'spot_hrefs_test.json')
+            with open(hrefs_path, 'r') as f:
+                hrefs = json.load(f)
+        else:
+            geobase = GeobaseSpotFTP()
 
         count = 0
         for f in src:
@@ -130,7 +138,9 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
             new_item = create_item(name, feature_out, ortho_collection)
             year_catalog.add_item(new_item)
 
-            for i, fname in enumerate(geobase.list_contents(name)):
+            fnames = geobase.list_contents(
+                name) if not test else hrefs["hrefs"]
+            for i, fname in enumerate(fnames):
                 # Include asset information for Geobase zipped imagery
                 # STAC parses hrefs starting with "ftp." as relative
                 title = fname[-13:-4]
@@ -153,11 +163,11 @@ def build_items(index_geom, spot_catalog, test, root_href, catalog_type):
                 new_item.add_asset(title, spot_file)
 
             # Add the thumbnail asset
+            href_tn = geobase.get_thumbnail(name) if not test else hrefs["tn"]
             new_item.add_asset(
                 key="thumbnail",
                 asset=Asset(
-                    href=geobase.get_thumbnail(name).replace(
-                        "ftp.", "http://ftp."),
+                    href=href_tn.replace("ftp.", "http://ftp."),
                     title=None,
                     media_type=MediaType.JPEG,
                     roles=['thumbnail'],
