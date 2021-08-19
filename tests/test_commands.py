@@ -5,7 +5,7 @@ import pystac
 
 from stactools.nrcan_spot_ortho.commands import create_spot_command
 from stactools.testing import CliTestCase
-from tests.test_utils import write_test_index
+from tests.test_utils import write_test_index, write_test_hrefs
 
 
 class ConvertIndexTest(CliTestCase):
@@ -17,20 +17,23 @@ class ConvertIndexTest(CliTestCase):
         with TemporaryDirectory() as tmp_dir:
             test_index_path = os.path.join(tmp_dir, 'spot_index_test.shp')
             write_test_index(test_index_path)
+            fname_json = "spot_hrefs_test.json"
+            test_hrefs_path = os.path.join(tmp_dir, fname_json)
+            write_test_hrefs(test_hrefs_path)
 
             cwd = os.getcwd()
             os.chdir(tmp_dir)
             cmd = [
-                'spot',
+                'nrcan-spot-ortho',
                 'convert-index',
                 test_index_path,
                 '.',
-                '-t',
             ]
             self.run_command(cmd)
             jsons = [
                 os.path.join(dp, f) for dp, dn, filenames in os.walk(tmp_dir)
-                for f in filenames if os.path.splitext(f)[1] == '.json'
+                for f in filenames if (os.path.splitext(f)[1] == '.json') and (
+                    fname_json not in f)
             ]
             os.chdir(cwd)
 

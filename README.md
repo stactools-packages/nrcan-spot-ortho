@@ -1,3 +1,5 @@
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/stactools-packages/template/main?filepath=docs/installation_and_basic_usage.ipynb)
+
 # stactools-nrcan-spot-ortho
 
 A subpackage of stactools for working with [orthorectified SPOT 4 and 5 data over Canada](https://open.canada.ca/data/en/dataset/d799c202-603d-4e5c-b1eb-d058803f80f9).
